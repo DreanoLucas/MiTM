@@ -8,6 +8,6 @@ if [ $1 = "push" ]
 	git commit
 	echo -n "Quelle branche ?"
 	read $branch
-	git push origin $branch
 	echo ouais
+	git push origin $branch
 fi
