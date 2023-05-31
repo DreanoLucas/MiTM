@@ -2,12 +2,12 @@
 
 """Script d'instalation du paquet biblio."""
 from setuptools import setup
-import biblio
+import mitm
 
 
 setup(
 	name="biblio",
-	version=biblio.VERSION,
+	version=mitm.VERSION,
 	description="un paquet pour gérer des bibliothèques",
 	packages=["biblio"],
 	scripts=["bibliodb"]
