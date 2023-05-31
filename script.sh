@@ -8,7 +8,7 @@ if [ $1 = "push" ]
 	git commit
 	git config --global push.default simple
 	echo -n "Quelle branche ?"
-	read $branch
+	read branch
 	echo ouais
 	git push origin $branch
 fi
