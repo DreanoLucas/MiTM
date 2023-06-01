@@ -6,9 +6,8 @@ import mitm
 
 
 setup(
-	name="biblio",
+	name="Man In The Middle",
 	version=mitm.VERSION,
 	description="un paquet pour gérer des bibliothèques",
-	packages=["biblio"],
-	scripts=["bibliodb"]
+	packages=["mitm"]
 )
