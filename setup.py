@@ -8,6 +8,6 @@ import mitm
 setup(
 	name="Man In The Middle",
 	version=mitm.VERSION,
-	description="un paquet pour gérer des bibliothèques",
+	description="Paquet pour gérer les Attaques Réseaux",
 	packages=["mitm"]
 )

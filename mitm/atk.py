@@ -29,6 +29,7 @@ def arp(ipa:str, ipb:str)->None:
   while True: #Boucle infinie
     sendp(paquet1, iface='enp0s3')
     sendp(paquet2, iface='enp0s3')
-    t.sleep(30) #Arrete le processus durant 60s
+    t.sleep(5) #Arrete le processus durant Xs
 
-arp(sys.argv[1], sys.argv[2])
+if __name__ == "__main__": 
+  arp(sys.argv[1], sys.argv[2])
