@@ -30,6 +30,7 @@ def arp_table(target_ip):
 
 def arp():
     ip_to_mac = arp_table("192.168.1.0/24")
+    print(ip_to_mac)
     sniff(filter='arp', prn=arp_watch)
 
 if __name__ == "__main__":
