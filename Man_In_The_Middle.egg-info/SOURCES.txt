@@ -1,9 +1,0 @@
-README.md
-setup.py
-Man_In_The_Middle.egg-info/PKG-INFO
-Man_In_The_Middle.egg-info/SOURCES.txt
-Man_In_The_Middle.egg-info/dependency_links.txt
-Man_In_The_Middle.egg-info/top_level.txt
-mitm/__init__.py
-mitm/atk.py
-mitm/listen.py
