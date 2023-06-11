@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 '''Fichier contenant les fonctions permetant de lire les paquettes envoyés dans un réseau'''
 import scapy 
-from scapy.all import sniff
+from scapy.all import sniff, DNSQR
 from scapy.layers.http import HTTPRequest
 
 from datetime import datetime
@@ -11,19 +11,6 @@ import json
 import sqlite3
 
 import sys
-
-def check(paquet:scapy)->str:
-    """Fonction retournants les paquets contenant une requète HTTP \n
-    paquet: paquets transitant dans le réseau selon le filtrage du sniff
-    """
-    if HTTPRequest in paquet:  #Si le paquet contient une requète HTTP
-        req = paquet[HTTPRequest]
-        return ("{} ; {} ; {} ; {}".format(
-                            datetime.now(),
-                            paquet[0][1].dst,
-                            req.Method.decode("utf-8"),
-                            req.Path.decode("utf-8"))
-        )
 
 def create_json_log(liste:list, filename:str)->None:
     """Procedure permetant d'ajouter une liste à un fichier JSON \n
@@ -66,6 +53,18 @@ def create_sql_log(liste:list, filename:str):
     connexion.commit()
     cursor.close
         
+def extract_http(paquet:scapy)->str:
+    """Fonction retournants les paquets contenant une requète HTTP \n
+    paquet: paquets transitant dans le réseau selon le filtrage du sniff
+    """
+    if HTTPRequest in paquet:  #Si le paquet contient une requète HTTP
+        req = paquet[HTTPRequest]
+        return ("{} ; {} ; {} ; {}".format(
+                            datetime.now(),
+                            paquet[0][1].dst,
+                            req.Method.decode("utf-8"),
+                            req.Path.decode("utf-8"))
+        )
 
 def http(ip, nb=10):
     """Procedure affichant les trames http capturées d'une ip spécifique. \n
@@ -74,9 +73,11 @@ def http(ip, nb=10):
     """
     list_sniff = []
     print(f"Lecture des trames http de {ip} durant {nb}s.")
-    sniff(prn=(lambda x: None if check(x) == None #Ne rien afficher si il n'y a pas HTTPRequest
-               else list_sniff.append(check(x).split(" ; ")) #Sinon ajouter la réponse a la liste list_sniff
-               or check(x)), #et l'affiche en même temps
+
+    """Faut tout refaire avec des fonctions imbriquées"""
+    sniff(prn=(lambda x: None if extract_http(x) == None #Ne rien afficher si il n'y a pas HTTPRequest
+               else list_sniff.append(extract_http(x).split(" ; ")) #Sinon ajouter la réponse a la liste list_sniff
+               or extract_http(x)), #et l'affiche en même temps
             filter=f'tcp and port 80 and src host {ip}',
             timeout=nb, #Nombre de seconde à capture
             iface="enp0s3")
@@ -85,5 +86,32 @@ def http(ip, nb=10):
     create_sql_log(list_sniff, "../capture.db")
     print("Fin de transmission")
 
+def dns(ip, nb=10):
+    """Procedure affichant les trames dns capturées d'une ip spécifique. \n
+    ip: IP ciblée pour la capture
+    nb: Nombre de seconde de capture des trames
+    """
+    print(f"Lecture des trames dns de {ip} durant {nb}s.")
+    noms = [] 
+
+    def extract_dns(paquet:scapy):
+        """Fonction retournants les paquets contenant une requète DBS \n
+        paquet: paquets transitant dans le réseau selon le filtrage du sniff
+        """
+        if DNSQR in paquet:
+            nom = paquet[DNSQR].qname.decode()
+            if nom not in noms:
+                noms.append(nom)
+                return nom
+        
+    sniff(filter=f"host {ip} and port 53", 
+          prn=extract_dns, 
+          timeout=nb)
+
 if __name__ == "__main__":
-    http(sys.argv[1])
+    if sys.argv[1] == "1": 
+        http(sys.argv[2])
+    elif sys.argv[1] == "2":
+        dns(sys.argv[2])
+    else: 
+        print("1 adresse_ip - http\n2 adresse_ip - dns")
