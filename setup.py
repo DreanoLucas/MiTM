@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-
 """Script d'instalation du paquet biblio."""
 from setuptools import setup
 import mitm
