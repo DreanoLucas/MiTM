@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 '''Fichier contenant les fonctions permetant de realiser des attaques MiTM'''
-from scapy.all import ARP,Ether,sendp, srp, sniff
+from scapy.all import ARP,Ether,DNSQR, sendp, srp, sniff
 import time as t
 import sys
 
