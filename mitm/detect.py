@@ -6,7 +6,7 @@ from scapy.all import Ether, ARP, sniff, srp, sendp
 def arp_watch(paquet:scapy)->None:
     global ip_to_mac
     if ARP in paquet and paquet[ARP].op in (1,2):
-        # print(ip_to_mac)
+        print(ip_to_mac)
         mac = paquet[ARP].hwsrc
         ip = paquet[ARP].psrc
         try: 
@@ -30,9 +30,11 @@ def arp_table(target_ip:str)->dict:
     return arp_table
 
 def arp():
+    global ip_to_mac 
+    ip_to_mac = arp_table("192.168.1.0/24")
     sniff(filter='arp', prn=arp_watch)
 
-ip_to_mac = arp_table("192.168.1.0/24")
+
 
 if __name__ == "__main__":
     arp()

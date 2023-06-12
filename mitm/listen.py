@@ -52,19 +52,6 @@ def create_sql_log(liste:list, filename:str):
     
     connexion.commit()
     cursor.close
-        
-def extract_http(paquet:scapy)->str:
-    """Fonction retournants les paquets contenant une requète HTTP \n
-    paquet: paquets transitant dans le réseau selon le filtrage du sniff
-    """
-    if HTTPRequest in paquet:  #Si le paquet contient une requète HTTP
-        req = paquet[HTTPRequest]
-        return ("{} ; {} ; {} ; {}".format(
-                            datetime.now(),
-                            paquet[0][1].dst,
-                            req.Method.decode("utf-8"),
-                            req.Path.decode("utf-8"))
-        )
 
 def http(ip, nb=10):
     """Procedure affichant les trames http capturées d'une ip spécifique. \n
@@ -74,10 +61,17 @@ def http(ip, nb=10):
     list_sniff = []
     print(f"Lecture des trames http de {ip} durant {nb}s.")
 
-    """Faut tout refaire avec des fonctions imbriquées"""
-    sniff(prn=(lambda x: None if extract_http(x) == None #Ne rien afficher si il n'y a pas HTTPRequest
-               else list_sniff.append(extract_http(x).split(" ; ")) #Sinon ajouter la réponse a la liste list_sniff
-               or extract_http(x)), #et l'affiche en même temps
+    def extract_http(paquet:scapy)->str:
+        """Fonction retournants les paquets contenant une requète HTTP \n
+        paquet: paquets transitant dans le réseau selon le filtrage du sniff
+        """
+        if HTTPRequest in paquet:  #Si le paquet contient une requète HTTP
+            req = paquet[HTTPRequest]
+            resultat = [str(datetime.now()), paquet[0][1].dst, req.Method.decode("utf-8"), req.Path.decode("utf-8")]
+            list_sniff.append(resultat)
+            return (f"{resultat[0]} ; {resultat[1]} ; {resultat[2]} ; {resultat[3]}")
+        
+    sniff(prn=extract_http, 
             filter=f'tcp and port 80 and src host {ip}',
             timeout=nb, #Nombre de seconde à capture
             iface="enp0s3")
@@ -95,7 +89,7 @@ def dns(ip, nb=10):
     noms = [] 
 
     def extract_dns(paquet:scapy):
-        """Fonction retournants les paquets contenant une requète DBS \n
+        """Fonction retournants les paquets contenant une requète DNS \n
         paquet: paquets transitant dans le réseau selon le filtrage du sniff
         """
         if DNSQR in paquet:
@@ -106,7 +100,8 @@ def dns(ip, nb=10):
         
     sniff(filter=f"host {ip} and port 53", 
           prn=extract_dns, 
-          timeout=nb)
+          timeout=nb,
+          iface="enp0s3")
 
 if __name__ == "__main__":
     if sys.argv[1] == "1": 
