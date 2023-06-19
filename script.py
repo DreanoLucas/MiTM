@@ -21,6 +21,7 @@ try:
         listen.dns(ip)
     elif argv[1] == "detect_arp":
         detect.arp()
-    raise ValueError
-except ValueError: 
+    else:
+        raise IndexError
+except IndexError: 
     help(script)
