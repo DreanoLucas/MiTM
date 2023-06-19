@@ -1,8 +1,10 @@
-from sys import argv 
-from mitm import atk, listen, detect
 '''Script permetant de lancer facilement les fonction principale du paquet mitm \n 
 Les arguments utilisables sont:
 arp, http, dns, detect_arp. ''' 
+import script
+from sys import argv 
+from mitm import atk, listen, detect
+
 
 try: 
     if  argv[1] == "arp":
@@ -19,5 +21,4 @@ try:
         detect.arp()
     raise ValueError
 except: 
-    print("Les fonctions à utiliser sont les suivantes:")
     help(script)
