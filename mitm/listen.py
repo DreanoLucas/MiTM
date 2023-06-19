@@ -10,7 +10,7 @@ from datetime import datetime
 import json
 import sqlite3
 
-import sys
+from sys import argv
 
 def create_json_log(liste:list, filename:str)->None:
     """Procedure permetant d'ajouter une liste à un fichier JSON \n
@@ -104,9 +104,9 @@ def dns(ip, nb=10):
           iface="enp0s3")
 
 if __name__ == "__main__":
-    if sys.argv[1] == "1": 
-        http(sys.argv[2])
-    elif sys.argv[1] == "2":
-        dns(sys.argv[2])
+    if argv[1] == "1": 
+        http(argv[2])
+    elif argv[1] == "2":
+        dns(argv[2])
     else: 
         print("1 adresse_ip - http\n2 adresse_ip - dns")
