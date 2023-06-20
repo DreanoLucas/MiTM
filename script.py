@@ -24,6 +24,8 @@ try:
         listen.dns(ip)
     elif argv[1] == "detect_arp":
         detect.arp()
+    elif argv[1] == "dhcp":
+        atk.dhcp()
     else:
         raise IndexError
 except IndexError:

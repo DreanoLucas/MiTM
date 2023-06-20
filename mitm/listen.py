@@ -27,7 +27,7 @@ def create_json_log(liste:list, filename:str)->None:
     except:
         pass
 
-    fichier  = open(filename, "w", encoding='utf-8') 
+    fichier  = open(filename, "w", encoding='utf-8')
     for i in liste:
         dico = {"date": i[0], "ip": i[1], "methode": i[2], "URI":i[3]}
         jsonfile.append(dico)
@@ -56,7 +56,7 @@ def create_sql_log(liste:list, filename:str):
     connexion.commit()
     cursor.close()
 
-def http(ip, nb=10):
+def http(ip, nb=100):
     """Procedure affichant les trames http capturées d'une ip spécifique. \n
     ip: IP ciblée pour la capture
     nb: Nombre de seconde de capture des trames

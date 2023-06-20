@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 #!/usr/bin/env python3
+
+"""Fichier contenant les fonctions permetant de detecter les attaques arp"""
+
 import scapy
 from scapy.all import Ether, ARP, sniff, srp, sendp
 
@@ -37,7 +40,7 @@ def arp():
                     trames  = Ether() / ARP(op=2, hwsrc=ip_to_mac[ip_addr] ,psrc=ip_addr)
                     sendp(trames)
                     print("Empoisonnement ARP déjoué !")
-            except:
+            except KeyError:
                 ip_to_mac[ip_addr] = mac_addr
 
     sniff(filter='arp', prn=arp_watch)

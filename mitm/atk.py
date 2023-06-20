@@ -4,7 +4,7 @@
 
 from time import sleep
 from sys import argv
-from scapy.all import ARP,Ether, DHCP, IP, UDP, BOOTP, sendp, srp, sniff, hexdump, get_if_addr, get_if_hwaddr
+from scapy.all import ARP,Ether, DHCP, IP, UDP, BOOTP, sendp, srp, sniff, get_if_addr, get_if_hwaddr
 
 
 def mac(ip_machine:str)->str:
@@ -45,13 +45,16 @@ def dhcp():
   def dhcp_reply(paquet):
     if DHCP in paquet and paquet[DHCP].options[0][1] == 1:
       eth = Ether(src=mac_src)
-      ip = IP(src = ip_src, dst="255.255.255.255")
+      ip_pkt = IP(src = ip_src, dst="255.255.255.255")
       udp = UDP(dport=68, sport=67)
       bootp = BOOTP(op=2, yiaddr="192.168.56.80", xid=paquet[BOOTP].xid)
-      dhcp = DHCP(options=[("message-type", "offer"), ('subnet_mask', '255.255.255.0'),('router', f'{ip_src}'), ("end")])
-      reply_offer =  eth / ip / udp / bootp / dhcp
+      dhcp_pkt = DHCP(options=[("message-type", "offer"),
+                           ('subnet_mask', '255.255.255.0'),
+                           ('router', f'{ip_src}'),
+                           ("end")])
+      reply_offer =  eth / ip_pkt / udp / bootp / dhcp_pkt
       sendp(reply_offer, iface='enp0s3')
-      return(reply_offer.show())
+      return reply_offer.show()
 
   sniff(prn=dhcp_reply,
     filter="udp and port 68" , iface='enp0s3')
