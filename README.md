@@ -1,7 +1,7 @@
 # **Developpement d'attaque MiTM et de sécurisation du réseau**
 
 ## Initialisation du paquet 
-Le module setuptools permet d'installer des paquets Python plus facilement en s'occupant de toutes les dépendances et de leur installation. Une fois que setuptools est installé, vous pouvez utiliser la commande python3 setup.py install --user pour installer le paquet « mitm ».
+Le module setuptools permet d'installer des paquets Python plus facilement en s'occupant de toutes les dépendances et de leur installation. Une fois que setuptools est installé, vous pouvez utiliser la commande python3 **setup.py install --user** pour installer le paquet « mitm ».
 
 Ensuite vous pourrez utiliser les fonctions du paquet. Avec la fonction help vous trouverez les d’information sur des fonctions ou fichiers du paquet. Par exemple si vous voulez savoir comment utiliser le fichier « atk.py » vous devez aller dans un IDE Python et faire les commandes suivantes : 
 
