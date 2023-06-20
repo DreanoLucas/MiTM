@@ -2,11 +2,17 @@
 ## **Developpement d'une attaque MiTM par ARP POISONING et de sécurisation du réseau**
 ### MITM
 Fichier mitm/atk.py
-### Ecoute du réseau
-Fichier mitm/listen.py
+
 Nous allons appliquer chacune des fonctions expliquées précédemment à un cas concret. Nous avons l’attaquant, le client et le serveur. Le client aura l’adresse IP 192.168.56.1 et le serveur 192.168.56.106. 
 Nous utilisons donc notre script « script.py » qui permet d’utiliser les fonctions avec des arguments rentrées en option.  Nous commençons donc par l’utilisation de l’empoisonnement arp entre le client et le serveur, alors on envoie des paquets continuellement aux deux.  
 ![image](https://github.com/DreanoLucas/SAE24/assets/49568908/fd8676a2-4f3f-443f-97ce-5229e0573663)
+
+Pour la fonction d’empoisonnement DHCP il suffit de lancer la fonction DHCP dans le fichier atk.py sans aucune entrée. On écoute le trafic, et lorsque l’on recoit une trame DHCP avec comme option discover nous y répondons avec une offer :
+
+![image](https://github.com/DreanoLucas/SAE24/assets/49568908/488a44a4-5b20-4862-91ce-3cf915067654)
+
+### Ecoute du réseau
+Fichier mitm/listen.py
 
 Nous pouvons en parallèle sur un deuxième terminal écouter le client avec la fonction http nous obtiendrons alors pendant 10 secondes par défaut ou le temps rentré en option. Une lecture de toutes les requêtes http effectuées par le client vers le serveur est alors faite et nous pouvons les observées ici. 
 
@@ -24,9 +30,3 @@ Nous pourrons maintenant utiliser l’écoute du trafic DNS qui nous donnera les
 Notre client étant sur Windows ici nous avons inversé client et serveur pour cette étape. Avec la fonction DNS nous pourrons donc observer l’adresse demandée par le client : 
 
 ![image](https://github.com/DreanoLucas/SAE24/assets/49568908/e7fda5d5-c30a-4629-b768-7e06a55b5386)
-
-Pour la fonction d’empoisonnement DHCP il suffit de lancer la fonction DHCP dans le fichier atk.py sans aucune entrée. On écoute le trafic, et lorsque l’on recoit une trame DHCP avec comme option discover nous y répondons avec une offer :
-
-![image](https://github.com/DreanoLucas/SAE24/assets/49568908/488a44a4-5b20-4862-91ce-3cf915067654)
-
-Cependant le client n’accepte pas notre adresse ip car il demande dans sa request une adresse ip autre que celle que nous lui fournissons.
