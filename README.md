@@ -1,6 +1,6 @@
 # SAE 24
-## **Developpement d'attaque MiTM et de sécurisation du réseau**
-### MITM
+# **Developpement d'attaque MiTM et de sécurisation du réseau**
+## MITM
 Fichier mitm/atk.py
 
 #### ARP
@@ -14,7 +14,7 @@ Pour la fonction d’empoisonnement DHCP il suffit de lancer la fonction DHCP da
 
 ![image](https://github.com/DreanoLucas/SAE24/assets/49568908/488a44a4-5b20-4862-91ce-3cf915067654)
 
-### Ecoute du réseau
+## Ecoute du réseau
 Fichier mitm/listen.py
 
 #### HTTP
