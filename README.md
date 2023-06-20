@@ -1,11 +1,12 @@
 # SAE 24
-## **Developpement d'une attaque MiTM par ARP POISONING et de sécurisation du réseau**
+## **Developpement d'attaque MiTM et de sécurisation du réseau**
 ### MITM
 Fichier mitm/atk.py
 
 #### ARP
 Nous allons appliquer chacune des fonctions expliquées précédemment à un cas concret. Nous avons l’attaquant, le client et le serveur. Le client aura l’adresse IP 192.168.56.1 et le serveur 192.168.56.106. 
 Nous utilisons donc notre script « script.py » qui permet d’utiliser les fonctions avec des arguments rentrées en option.  Nous commençons donc par l’utilisation de l’empoisonnement arp entre le client et le serveur, alors on envoie des paquets continuellement aux deux.  
+
 ![image](https://github.com/DreanoLucas/SAE24/assets/49568908/fd8676a2-4f3f-443f-97ce-5229e0573663)
 
 #### DHCP
