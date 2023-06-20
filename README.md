@@ -7,7 +7,7 @@ Fichier mitm/atk.py
 Nous allons appliquer chacune des fonctions expliquées précédemment à un cas concret. Nous avons l’attaquant, le client et le serveur. Le client aura l’adresse IP 192.168.56.1 et le serveur 192.168.56.106. 
 Nous utilisons donc notre script « script.py » qui permet d’utiliser les fonctions avec des arguments rentrées en option.  Nous commençons donc par l’utilisation de l’empoisonnement arp entre le client et le serveur, alors on envoie des paquets continuellement aux deux.  
 
-![image](https://github.com/DreanoLucas/SAE24/assets/49568908/fd8676a2-4f3f-443f-97ce-5229e0573663)
+![image](https://github.com/DreanoLucas/SAE24/assets/49568908/b625f15e-44e8-4176-a0a8-601eecf2f75e)
 
 #### DHCP
 Pour la fonction d’empoisonnement DHCP il suffit de lancer la fonction DHCP dans le fichier atk.py sans aucune entrée. On écoute le trafic, et lorsque l’on recoit une trame DHCP avec comme option discover nous y répondons avec une offer :
