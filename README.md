@@ -24,6 +24,7 @@ Nous pouvons en parallèle sur un deuxième terminal écouter le client avec la 
 
 #### SAUVEGARDE HTTP
 Nous pouvons observer ces mêmes résultat dans les fichiers capture.json et capture.db comme expliquer dans leurs parties respectives.
+
 ![image](https://github.com/DreanoLucas/SAE24/assets/49568908/ab412cc4-6817-4714-a121-7bafbb371177)
 
 ![image](https://github.com/DreanoLucas/SAE24/assets/49568908/2c11f4bf-7b4f-4aa0-bed4-17102af2a036)
