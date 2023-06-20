@@ -1,5 +1,14 @@
 # **Developpement d'attaque MiTM et de sécurisation du réseau**
 
+## Instalation du paquet
+Pour installer le paquet vous pouvez le faire directement en ligne sur le site de Github. 
+
+![image](https://github.com/DreanoLucas/SAE24/assets/118349600/b27363cd-a2c3-4032-b0dd-ad47d502b3c1)
+
+Ou si vous avez git d’installer sur votre machine utiliser simplement la commande : 
+**git clone https://github.com/DreanoLucas/SAE24.git** 
+
+
 ## Initialisation du paquet 
 Le module setuptools permet d'installer des paquets Python plus facilement en s'occupant de toutes les dépendances et de leur installation. Une fois que setuptools est installé, vous pouvez utiliser la commande python3 **setup.py install --user** pour installer le paquet « mitm ».
 
